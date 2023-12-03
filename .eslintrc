@@ -1,51 +1,112 @@
 {
-    "root": true,
-    "extends": [
-        "plugin:react/recommended",
-        "plugin:@typescript-eslint/recommended"
-    ],
-    "parser": "@typescript-eslint/parser",
-    "parserOptions": {
-        "sourceType": "module",
-        "ecmaVersion": 2015,
-        "ecmaFeatures": {
-            "jsx": true // JSX-compatible
-        }
-    },
-    "env": {
-        "es6": true,
-        "browser": true,
-        "node": true
-    },
-    "plugins": [
-        "@typescript-eslint",
-        "react"
-    ],
-    "rules": {
-        "@typescript-eslint/no-var-requires": "off", // To avoid of error: "Require statement not part of import statement", if ES modules are used 
-        "semi": [
-            "error",
-            "always"
-        ],
-        "quotes": [
-            "error",
-            "double"
-        ],
-        "indent": "off",
-        "no-fallthrough": "off", // disallow fallthrough of case statements
-        "no-multiple-empty-lines": [
-            1,
-            {
-                "max": 2
-            }
-        ], // disallow multiple empty lines (off by default)
-        "no-nested-ternary": 1, // disallow nested ternary expressions (off by default)
-        "eqeqeq": 2, // require the use of === and !==
-        "react/prop-types": "off" // Prevent missing props validation in a React component definition
-    },
-    "settings": {
-        "react": {
-            "version": "detect" // Tell eslint-plugin-react to automatically detect the latest version of react.
-        }
+  "root": true,
+  "extends": [
+    "eslint:recommended",
+    "plugin:react/recommended",
+    "plugin:@typescript-eslint/recommended",
+    "prettier",
+    "plugin:perfectionist/recommended-alphabetical"
+  ],
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "sourceType": "module",
+    "ecmaVersion": 2015,
+    "ecmaFeatures": {
+      "jsx": true // JSX-compatible
     }
+  },
+  "env": {
+    "es6": true,
+    "browser": true,
+    "node": true
+  },
+  "plugins": [
+    "react",
+    "react-hooks",
+    "@typescript-eslint",
+    "prettier",
+    "perfectionist"
+  ],
+  "rules": {
+    "perfectionist/sort-classes": [
+      "error",
+      {
+        "type": "natural",
+        "order": "asc",
+        "groups": [
+          "index-signature",
+          "static-property",
+          "private-property",
+          "property",
+          "constructor",
+          "static-method",
+          "private-method",
+          "method"
+        ]
+      }
+    ],
+    "perfectionist/sort-enums": [
+      "error",
+      {
+        "type": "natural",
+        "order": "asc"
+      }
+    ],
+    "perfectionist/sort-imports": [
+      "error",
+      {
+        "type": "natural",
+        "order": "asc",
+        "groups": [
+          "type",
+          "react",
+          ["builtin", "external"],
+          "internal-type",
+          "internal",
+          ["parent-type", "sibling-type", "index-type"],
+          ["parent", "sibling", "index"],
+          "side-effect",
+          "style",
+          "object",
+          "unknown"
+        ],
+        "custom-groups": {
+          "value": {
+            "react": ["react", "react-*"]
+          },
+          "type": {
+            "react": "react"
+          }
+        },
+        "newlines-between": "always",
+        "internal-pattern": [
+          "@/components/**",
+          "@/stores/**",
+          "@/pages/**",
+          "@/lib/**"
+        ]
+      }
+    ],
+    "space-infix-ops": ["error", { "int32Hint": false }],
+    "@typescript-eslint/no-var-requires": "off", // To avoid of error: "Require statement not part of import statement", if ES modules are used
+    "semi": ["error", "always"],
+    "quotes": ["error", "single"],
+    "indent": "off",
+    "@typescript-eslint/ban-ts-comment": "off",
+    "no-fallthrough": "off", // disallow fallthrough of case statements
+    "no-multiple-empty-lines": [
+      1,
+      {
+        "max": 2
+      }
+    ], // disallow multiple empty lines (off by default)
+    "no-nested-ternary": 1, // disallow nested ternary expressions (off by default)
+    "eqeqeq": 2, // require the use of === and !==
+    "react/prop-types": "off" // Prevent missing props validation in a React component definition
+  },
+  "settings": {
+    "react": {
+      "version": "detect" // Tell eslint-plugin-react to automatically detect the latest version of react.
+    }
+  }
 }
