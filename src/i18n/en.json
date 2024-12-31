@@ -1,5 +1,25 @@
 {
   "common": {
-    "title": "React Empty Project"
+    "title": "Title",
+    "description": "Description",
+    "due-date": "Due Date",
+    "add": "Add",
+    "edit": "Edit",
+    "cancel": "Cancel",
+    "search": "Search",
+    "sort": "Sort",
+    "by-date": "By Date",
+    "by-text": "Alphabetical",
+    "email": "Email",
+    "username": "Username",
+    "password": "Password",
+    "confirm-password": "Confirm Password"
+  },
+  "auth": {
+    "logout": "Logout",
+    "signin": "Sign In",
+    "signin-text": "Already have an account?",
+    "signup": "Sign Up",
+    "signup-text": "Don’t have an account?"
   }
 }

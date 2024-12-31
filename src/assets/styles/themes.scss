@@ -1,0 +1,28 @@
+:root {
+  /* Color */
+  --primary-color: #00af91;
+  --white: #fff;
+  --black: #000;
+  --error-color: red;
+  --success-color: green;
+
+  /* Font Size */
+  --font-size-title: 2rem;
+  --font-size-heading: 1rem;
+  --font-size-body: 0.785rem;
+
+  /* Border Radius */
+  --border-radius: 4px;
+}
+
+[data-theme="light"] {
+  --background-color: #fafafa;
+  --background-card-color: #f0f0f0;
+  --text-color: #282846;
+}
+
+[data-theme="dark"] {
+  --background-color: #222831;
+  --background-card-color: #2c3440;
+  --text-color: #f9f9f9;
+}

@@ -1,10 +1,11 @@
 import { combineReducers, configureStore } from '@reduxjs/toolkit';
 import { createLogger } from 'redux-logger';
+import { todosSlice } from "store/ducks/todo/todo.slice";
 
 const loggerMiddleware = createLogger();
 
 const rootReducer = combineReducers({
-  // moduleReducer: moduleSlice.reducer,
+  todos: todosSlice.reducer,
 });
 
 export const store = configureStore({

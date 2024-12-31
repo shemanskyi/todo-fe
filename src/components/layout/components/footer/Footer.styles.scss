@@ -1,0 +1,11 @@
+.container {
+  width: 100vw;
+  height: 50px;
+  font-size: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--primary-color);
+  padding: 1rem;
+  background: var(--background-color);
+}

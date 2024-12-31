@@ -1,0 +1,27 @@
+.sort {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  color: var(--text-color);
+  cursor: pointer;
+  font-size: 12px;
+  text-transform: uppercase;
+}
+
+.popover {
+  width: 120px;
+  background-color: var(--background-color);
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: 1rem;
+}
+
+.item {
+  color: var(--text-color);
+  font-size: 12px;
+  cursor: pointer;
+}

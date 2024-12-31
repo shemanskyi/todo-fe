@@ -2,17 +2,13 @@
   "extends": ["stylelint-config-standard", "stylelint-config-clean-order"],
   "plugins": ["stylelint-order"],
   "rules": {
+    "at-rule-no-unknown": null,
     "no-empty-source": null,
+    "media-query-no-invalid": null,
+    "import-notation": "string",
     "declaration-empty-line-before": null,
-    "no-missing-end-of-source-newline": null,
     "selector-class-pattern": null,
-    "order/order": [
-			"custom-properties",
-			"declarations"
-		],
-		"order/properties-order": [
-			"width",
-			"height"
-		]
+    "order/order": ["custom-properties", "declarations"],
+    "order/properties-order": ["width", "height"]
   }
 }

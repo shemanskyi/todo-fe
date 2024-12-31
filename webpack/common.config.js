@@ -1,85 +1,100 @@
-const webpack = require('webpack');
+const webpack = require("webpack");
+const dotenv = require("dotenv");
 
-const path = require('path');
+const path = require("path");
 
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
-const HtmlWebpackPlugin = require('html-webpack-plugin');
+const HtmlWebpackPlugin = require("html-webpack-plugin");
 
-const FaviconsWebpackPlugin = require('favicons-webpack-plugin');
+const FaviconsWebpackPlugin = require("favicons-webpack-plugin");
 
-const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin');
+const ReactRefreshWebpackPlugin = require("@pmmmwh/react-refresh-webpack-plugin");
 
-const FileManagerPlugin = require('filemanager-webpack-plugin');
+const FileManagerPlugin = require("filemanager-webpack-plugin");
 
-const BUILD_DIR = path.resolve(__dirname, '..', 'build');
-const PUBLIC_DIR = path.resolve(__dirname, '..', 'public');
-const STATIC_DIR = path.resolve(__dirname, '..', 'static');
-const plugins = [new FileManagerPlugin({
-  events: {
-    onEnd: {
-      // Copy static files
-      copy: [{
-        destination: BUILD_DIR,
-        source: STATIC_DIR
-      }]
+const BUILD_DIR = path.resolve(__dirname, "..", "build");
+const PUBLIC_DIR = path.resolve(__dirname, "..", "public");
+const STATIC_DIR = path.resolve(__dirname, "..", "static");
+
+const env = dotenv.config().parsed;
+
+// reduce it to a nice object, the same as before
+const envKeys = Object.keys(env).reduce((prev, next) => {
+  prev[`process.env.${next}`] = JSON.stringify(env[next]);
+  return prev;
+}, {});
+
+const plugins = [
+  new FileManagerPlugin({
+    events: {
+      onEnd: {
+        // Copy static files
+        copy: [
+          {
+            destination: BUILD_DIR,
+            source: STATIC_DIR,
+          },
+        ],
+      },
+      // Remove build dir
+      onStart: {
+        delete: [BUILD_DIR],
+      },
     },
-    // Remove build dir
-    onStart: {
-      delete: [BUILD_DIR]
-    }
-  }
-}), new HtmlWebpackPlugin({
-  filename: 'index.html',
-  template: path.join(PUBLIC_DIR, 'index.html')
-}), //
-new FaviconsWebpackPlugin({
-  cache: false // Disallow caching the assets across webpack builds.
-  ,
-  favicons: {
-    icons: {
-      // Apple startup images.
-      android: false,
-      appleIcon: false,
-      // Apple touch icons.
-      appleStartup: false,
-      // Regular favicons.
-      coast: false,
-      // Android homescreen icon.
-      favicons: true,
-      // Opera Coast icon.
-      firefox: false,
-      // Firefox OS icons.
-      windows: false,
-      // Windows 8 tile icons.
-      yandex: false // Yandex browser icon.
-
-    }
-  },
-  // Injecting into all HTML Files or separately (for an every instance of HtmlWebpackPlugin)
-  // inject: true,
-  inject: htmlPlugin => path.basename(htmlPlugin.options.filename) === 'index.html',
-  logo: path.resolve(PUBLIC_DIR, 'favicon.svg'),
-  mode: 'webapp',
-  outputPath: path.resolve(BUILD_DIR, 'favicons'),
-  prefix: '/favicons/'
-}), new webpack.HotModuleReplacementPlugin()];
+  }),
+  new HtmlWebpackPlugin({
+    filename: "index.html",
+    template: path.join(PUBLIC_DIR, "index.html"),
+  }),
+  new webpack.DefinePlugin(envKeys),
+  new FaviconsWebpackPlugin({
+    cache: false, // Disallow caching the assets across webpack builds.
+    favicons: {
+      icons: {
+        // Apple startup images.
+        android: false,
+        appleIcon: false,
+        // Apple touch icons.
+        appleStartup: false,
+        // Regular favicons.
+        coast: false,
+        // Android homescreen icon.
+        favicons: true,
+        // Opera Coast icon.
+        firefox: false,
+        // Firefox OS icons.
+        windows: false,
+        // Windows 8 tile icons.
+        yandex: false, // Yandex browser icon.
+      },
+    },
+    // Injecting into all HTML Files or separately (for an every instance of HtmlWebpackPlugin)
+    // inject: true,
+    inject: (htmlPlugin) =>
+      path.basename(htmlPlugin.options.filename) === "index.html",
+    logo: path.resolve(PUBLIC_DIR, "favicon.svg"),
+    mode: "webapp",
+    outputPath: path.resolve(BUILD_DIR, "favicons"),
+    prefix: "/favicons/",
+  }),
+  new webpack.HotModuleReplacementPlugin(),
+];
 
 if (process.env.SERVE) {
   plugins.push(new ReactRefreshWebpackPlugin());
 }
 
 const devServer = {
-  allowedHosts: 'all',
+  allowedHosts: "all",
   // Reload the page after changes saved (HotModuleReplacementPlugin)
   client: {
     // Shows a full-screen overlay in the browser when there are compiler errors or warnings
     overlay: {
       errors: true,
-      warnings: true
+      warnings: true,
     },
-    progress: true // Prints compilation progress in percentage in the browser.
-
+    progress: true, // Prints compilation progress in percentage in the browser.
   },
   compress: true,
 
@@ -89,94 +104,106 @@ const devServer = {
    * To resolve should use FileManager
    */
   devMiddleware: {
-    writeToDisk: false
+    writeToDisk: false,
   },
   historyApiFallback: true,
   hot: true,
   // Apply HTML5 History API if routes are used
   open: true,
   port: 9000,
-  static: [// Required to use favicons located in a separate directory as assets
+  static: [
+    // Required to use favicons located in a separate directory as assets
     // Should use with historyApiFallback, to avoid of 404 for routes
     {
-      directory: path.join(BUILD_DIR, 'favicons')
-    }]
+      directory: path.join(BUILD_DIR, "favicons"),
+    },
+  ],
 };
 
 module.exports = {
   devServer,
-  entry: path.join(__dirname, '..', 'src', 'index.tsx'),
+  entry: path.join(__dirname, "..", "src", "index.tsx"),
   module: {
     // Strict mod to avoid of importing non-existent objects
-    rules: [// --- JS | TS USING BABEL
+    rules: [
+      // --- JS | TS USING BABEL
       {
         exclude: /node_modules/,
         test: /\.[jt]sx?$/,
         use: {
-          loader: 'babel-loader',
+          loader: "babel-loader",
           options: {
-            cacheDirectory: true // Using a cache to avoid of recompilation
-
-          }
-        }
+            cacheDirectory: true, // Using a cache to avoid of recompilation
+          },
+        },
       }, // --- HTML
       {
         test: /\.(html)$/,
-        use: ['html-loader']
+        use: ["html-loader"],
       }, // --- S/A/C/SS
       {
         test: /\.(s[ac]|c)ss$/i,
-        use: [MiniCssExtractPlugin.loader, {
-          loader: 'css-loader',
-          // translates css into CommonJS
-          options: {
-            esModule: true,
-            // css modules
-            modules: {
-              localIdentName: '[name]__[local]__[hash:base64:5]',
-              // format of output
-              namedExport: false // named exports instead of default
-
+        use: [
+          MiniCssExtractPlugin.loader,
+          {
+            loader: "css-loader",
+            // translates css into CommonJS
+            options: {
+              esModule: true,
+              // css modules
+              modules: {
+                localIdentName: "[name]__[local]__[hash:base64:5]",
+                // format of output
+                namedExport: false, // named exports instead of default
+              },
+              sourceMap: true,
             },
-            sourceMap: true
-          }
-        }, {
-          // autoprefixer
-          loader: 'postcss-loader',
-          options: {
-            postcssOptions: {
-              plugins: [['postcss-preset-env', {// Options
-              }],
-              [
-                'autoprefixer',
-                {
-                  // Options
-                },
-              ]],
-            }
-          }
-        }]
+          },
+          {
+            // autoprefixer
+            loader: "postcss-loader",
+            options: {
+              postcssOptions: {
+                plugins: [
+                  [
+                    "postcss-preset-env",
+                    {
+                      // Options
+                    },
+                  ],
+                  [
+                    "autoprefixer",
+                    {
+                      // Options
+                    },
+                  ],
+                ],
+              },
+            },
+          },
+        ],
       }, // --- S/A/SS
       {
         test: /\.(s[ac])ss$/i,
-        use: ['sass-loader']
+        use: ["sass-loader"],
       }, // --- IMG
       {
         generator: {
-          filename: 'assets/img/[hash][ext]'
+          filename: "assets/img/[hash][ext]",
         },
         test: /\.(png|jpe?g|gif|svg|webp|ico)$/i,
-        type: 'asset/resource'
+        type: "asset/resource",
       }, // --- FONTS
       {
         exclude: /node_modules/,
         generator: {
-          filename: 'assets/fonts/[hash][ext]'
+          filename: "assets/fonts/[hash][ext]",
         },
         test: /\.(woff2?|eot|ttf|otf)$/i,
-        type: 'asset/resource'
-      }],
-    strictExportPresence: true
+        type: "asset/resource",
+      },
+    ],
+    strictExportPresence: true,
   },
   output: {
     path: BUILD_DIR,
@@ -185,23 +212,30 @@ module.exports = {
      * Helps to avoid of MIME type ('text/html') is not a supported stylesheet
      * And sets address in html imports
      */
-    publicPath: '/'
+    publicPath: "/",
   },
   // Checking the maximum weight of the bundle is disabled
   performance: {
-    hints: false
+    hints: false,
   },
   plugins,
   // Modules resolved
   resolve: {
     alias: {
-      assets: path.resolve(__dirname, '../src/assets'),
-      config: path.resolve(__dirname, '../src/config'),
-      constants: path.resolve(__dirname, '../src/constants'),
-      i18n: path.resolve(__dirname, '../src/i18n'),
-      pages: path.resolve(__dirname, '../src/pages'),
-      utils: path.resolve(__dirname, '../src/utils'),
+      assets: path.resolve(__dirname, "../src/assets"),
+      config: path.resolve(__dirname, "../src/config"),
+      constants: path.resolve(__dirname, "../src/constants"),
+      context: path.resolve(__dirname, "../src/context"),
+      components: path.resolve(__dirname, "../src/components"),
+      hooks: path.resolve(__dirname, "../src/hooks"),
+      i18n: path.resolve(__dirname, "../src/i18n"),
+      pages: path.resolve(__dirname, "../src/pages"),
+      utils: path.resolve(__dirname, "../src/utils"),
+      types: path.resolve(__dirname, "../src/types"),
+      store: path.resolve(__dirname, "../src/store"),
+      services: path.resolve(__dirname, "../src/services"),
+      "ui-components": path.resolve(__dirname, "../src/ui-components"),
     },
-    extensions: ['.tsx', '.ts', '.js']
-  }
+    extensions: [".tsx", ".ts", ".js"],
+  },
 };

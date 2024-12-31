@@ -1,0 +1,33 @@
+.button {
+  border-radius: var(--border-radius);
+  min-width: 64px;
+  padding: 0 1rem;
+}
+
+.button:hover {
+  opacity: 0.8;
+}
+
+.primary {
+  background-color: var(--primary-color);
+  color: var(--white);
+}
+
+.secondary {
+  color: var(--white);
+}
+
+.small {
+  height: 32px;
+  font-size: 14px;
+}
+
+.medium {
+  height: 36px;
+  font-size: 16px;
+}
+
+.large {
+  height: 44px;
+  font-size: 18px;
+}
